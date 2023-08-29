@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Registro de Viajes</title>
+</head>
+<body>
+    <h1>Registro de Viajes</h1>
+    
+    <form id="travel-form">
+        <label for="date">Fecha:</label>
+        <input type="date" id="date" required><br>
+        
+        <label for="kilometers">Kilómetros:</label>
+        <input type="number" id="kilometers" required><br>
+        
+        <button type="submit">Registrar Viaje</button>
+    </form>
+    
+    <ul id="travel-list"></ul>
+
+    <script>
+        const travelForm = document.getElementById('travel-form');
+        const dateInput = document.getElementById('date');
+        const kilometersInput = document.getElementById('kilometers');
+        const travelList = document.getElementById('travel-list');
+        
+        // Cargar registros al inicio
+        window.onload = () => {
+            loadTravelRecords();
+        };
+        
+        // Agregar evento al formulario
+        travelForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const date = dateInput.value;
+            const kilometers = kilometersInput.value;
+            saveTravelRecord(date, kilometers);
+            loadTravelRecords();
+            travelForm.reset();
+        });
+        
+        // Guardar registro en Local Storage
+        function saveTravelRecord(date, kilometers) {
+            const record = { date, kilometers };
+            const records = JSON.parse(localStorage.getItem('travelRecords')) || [];
+            records.push(record);
+            localStorage.setItem('travelRecords', JSON.stringify(records));
+        }
+        
+        // Cargar registros desde Local Storage
+        function loadTravelRecords() {
+            travelList.innerHTML = '';
+            const records = JSON.parse(localStorage.getItem('travelRecords')) || [];
+            records.forEach((record) => {
+                const li = document.createElement('li');
+                li.textContent = `Fecha: ${record.date}, Kilómetros: ${record.kilometers}`;
+                travelList.appendChild(li);
+            });
+        }
+    </script>
+</body>
+</html>
