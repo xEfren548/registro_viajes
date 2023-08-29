@@ -57,6 +57,40 @@
                 travelList.appendChild(li);
             });
         }
+
+        // Función para eliminar un registro
+    function deleteTravelRecord(index) {
+        const records = JSON.parse(localStorage.getItem('travelRecords')) || [];
+        records.splice(index, 1);
+        localStorage.setItem('travelRecords', JSON.stringify(records));
+        loadTravelRecords();
+    }
+
+    // Función para cargar registros con opciones de edición y eliminación
+    function loadTravelRecords() {
+        travelList.innerHTML = '';
+        const records = JSON.parse(localStorage.getItem('travelRecords')) || [];
+        records.forEach((record, index) => {
+            const li = document.createElement('li');
+            li.innerHTML = `
+                Fecha: ${record.date}, Kilómetros: ${record.kilometers}
+                <button onclick="editTravelRecord(${index})">Editar</button>
+                <button onclick="deleteTravelRecord(${index})">Eliminar</button>
+            `;
+            travelList.appendChild(li);
+        });
+    }
+
+    // Función para editar un registro
+    function editTravelRecord(index) {
+        const records = JSON.parse(localStorage.getItem('travelRecords')) || [];
+        const record = records[index];
+        if (record) {
+            dateInput.value = record.date;
+            kilometersInput.value = record.kilometers;
+            deleteTravelRecord(index);  // Elimina el registro existente para ser reemplazado
+        }
+    }
     </script>
 </body>
 </html>
