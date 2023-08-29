@@ -48,7 +48,7 @@
         });
         
         // Guardar registro en Local Storage
-        function saveTravelRecord(date, kilometers) {
+        function saveTravelRecord(name, date, kilometers) {
             const record = { name, date, kilometers };
             const records = JSON.parse(localStorage.getItem('travelRecords')) || [];
             records.push(record);
