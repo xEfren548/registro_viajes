@@ -49,6 +49,9 @@
         
         // Guardar registro en Local Storage
         function saveTravelRecord(name, date, kilometers) {
+            console.log(name);
+            console.log(date);
+            console.log(kilometers);
             const record = { name, date, kilometers };
             const records = JSON.parse(localStorage.getItem('travelRecords')) || [];
             records.push(record);
@@ -134,7 +137,7 @@
 
     function updateAfterChanges() {
         loadTravelRecords();
-        calculateTotalKilometers();
+        // calculateTotalKilometers();
     }
     </script>
 </body>
