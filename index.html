@@ -7,6 +7,9 @@
     <h1>Registro de Viajes</h1>
     
     <form id="travel-form">
+        <label for="name">Nombre: </label>
+        <input type="text" id="name" required><br>
+
         <label for="date">Fecha:</label>
         <input type="date" id="date" required><br>
         
@@ -19,9 +22,10 @@
     <ul id="travel-list"></ul>
 
 
-    <p id="total-kilometers">Total de Kilómetros: 0</p>
+    <!-- <p id="total-kilometers">Total de Kilómetros: 0</p> -->
 
     <script>
+        const nameInput = document.getElementById('name')
         const travelForm = document.getElementById('travel-form');
         const dateInput = document.getElementById('date');
         const kilometersInput = document.getElementById('kilometers');
@@ -35,16 +39,17 @@
         // Agregar evento al formulario
         travelForm.addEventListener('submit', (event) => {
             event.preventDefault();
+            const name = nameInput.value;
             const date = dateInput.value;
             const kilometers = kilometersInput.value;
-            saveTravelRecord(date, kilometers);
+            saveTravelRecord(name, date, kilometers);
             loadTravelRecords();
             travelForm.reset();
         });
         
         // Guardar registro en Local Storage
         function saveTravelRecord(date, kilometers) {
-            const record = { date, kilometers };
+            const record = { name, date, kilometers };
             const records = JSON.parse(localStorage.getItem('travelRecords')) || [];
             records.push(record);
             localStorage.setItem('travelRecords', JSON.stringify(records));
@@ -57,7 +62,7 @@
             const records = JSON.parse(localStorage.getItem('travelRecords')) || [];
             records.forEach((record) => {
                 const li = document.createElement('li');
-                li.textContent = `Fecha: ${record.date}, Kilómetros: ${record.kilometers}`;
+                li.textContent = `Nombre: ${record.name} Fecha: ${record.date}, Kilómetros: ${record.kilometers}`;
                 travelList.appendChild(li);
             });
         }
@@ -78,7 +83,7 @@
         records.forEach((record, index) => {
             const li = document.createElement('li');
             li.innerHTML = `
-                Fecha: ${record.date}, Kilómetros: ${record.kilometers}
+                Nombre: ${record.name}, Fecha: ${record.date}, Kilómetros: ${record.kilometers}
                 <button onclick="editTravelRecord(${index})">Editar</button>
                 <button onclick="deleteTravelRecord(${index})">Eliminar</button>
             `;
@@ -91,6 +96,7 @@
         const records = JSON.parse(localStorage.getItem('travelRecords')) || [];
         const record = records[index];
         if (record) {
+            nombreInput.value = record.name;
             dateInput.value = record.date;
             kilometersInput.value = record.kilometers;
             deleteTravelRecord(index);  // Elimina el registro existente para ser reemplazado
@@ -100,7 +106,7 @@
     // Cargar registros al inicio
     window.onload = () => {
         loadTravelRecords();
-        calculateTotalKilometers();
+        // calculateTotalKilometers();
     };
     
     // Función para cargar registros con opciones de edición y eliminación
@@ -110,7 +116,7 @@
         records.forEach((record, index) => {
             const li = document.createElement('li');
             li.innerHTML = `
-                Fecha: ${record.date}, Kilómetros: ${record.kilometers}
+                Nombre: ${record.name}, Fecha: ${record.date}, Kilómetros: ${record.kilometers}
                 <button onclick="editTravelRecord(${index})">Editar</button>
                 <button onclick="deleteTravelRecord(${index})">Eliminar</button>
             `;
@@ -119,12 +125,12 @@
     }
 
     // Función para calcular y mostrar el total de kilómetros
-    function calculateTotalKilometers() {
-        const records = JSON.parse(localStorage.getItem('travelRecords')) || [];
-        const totalKilometers = records.reduce((total, record) => total + parseFloat(record.kilometers), 0);
-        const totalKilometersElement = document.getElementById('total-kilometers');
-        totalKilometersElement.textContent = `Total de Kilómetros: ${totalKilometers}`;
-    }
+    // function calculateTotalKilometers() {
+    //     const records = JSON.parse(localStorage.getItem('travelRecords')) || [];
+    //     const totalKilometers = records.reduce((total, record) => total + parseFloat(record.kilometers), 0);
+    //     const totalKilometersElement = document.getElementById('total-kilometers');
+    //     totalKilometersElement.textContent = `Total de Kilómetros: ${totalKilometers}`;
+    // }
 
     function updateAfterChanges() {
         loadTravelRecords();
