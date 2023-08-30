@@ -1,9 +1,17 @@
-<!DOCTYPE html>
-<html>
-<head>
+<!doctype html>
+<html lang="en">
+  <head>
     <title>Registro de Viajes</title>
-</head>
-<body>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  </head>
+  <body>
+    <div class="container">
+
     <h1>Registro de Viajes</h1>
     
     <form id="travel-form">
@@ -16,17 +24,38 @@
         <label for="kilometers">Kilómetros:</label>
         <input type="number" id="kilometers" step="0.1" required><br>
         
-        <button type="submit">Registrar Viaje</button>
+        <button class="btn btn-primary" type="submit">Registrar Viaje</button>
+
     </form>
+
+    
     
     <ul id="travel-list"></ul>
 
+    <div class="col-8">
+        <table id="travel-table" class="table">
+            <thead class="thead-light">
+                <tr>
+                    <th>Nombre</th>
+                    <th>Fecha</th>
+                    <th>Kilómetros</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="travel-body"></tbody>
+        </table>
+    </div>
 
-    <!-- <p id="total-kilometers">Total de Kilómetros: 0</p> -->
+    
 
+    </div>
+
+    <!-- Optional JavaScript -->
     <script>
         const nameInput = document.getElementById('name')
         const travelForm = document.getElementById('travel-form');
+        const travelTable = document.getElementById('travel-table');
+        const travelBody = document.getElementById('travel-body');
         const dateInput = document.getElementById('date');
         const kilometersInput = document.getElementById('kilometers');
         const travelList = document.getElementById('travel-list');
@@ -57,15 +86,37 @@
         }
         
         // Cargar registros desde Local Storage
+        // function loadTravelRecords() {
+        //     travelList.innerHTML = '';
+        //     const records = JSON.parse(localStorage.getItem('travelRecords')) || [];
+        //     records.forEach((record) => {
+        //         const li = document.createElement('li');
+        //         li.textContent = `Nombre: ${record.name} Fecha: ${record.date}, Kilómetros: ${record.kilometers}`;
+        //         travelList.appendChild(li);
+
+                
+
+        //     });
+        // }
         function loadTravelRecords() {
-            travelList.innerHTML = '';
+            travelBody.innerHTML = '';
             const records = JSON.parse(localStorage.getItem('travelRecords')) || [];
-            records.forEach((record) => {
-                const li = document.createElement('li');
-                li.textContent = `Nombre: ${record.name} Fecha: ${record.date}, Kilómetros: ${record.kilometers}`;
-                travelList.appendChild(li);
+            records.forEach((record, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${record.name}</td>
+                    <td>${record.date}</td>
+                    <td>${record.kilometers}</td>
+                    <td>
+                        <button class="btn btn-primary" onclick="editTravelRecord(${index})">Editar</button>
+                        <button class="btn btn-danger   " onclick="deleteTravelRecord(${index})">Eliminar</button>
+                    </td>
+                `;
+                travelBody.appendChild(row);
             });
         }
+
+
 
         // Función para eliminar un registro
     function deleteTravelRecord(index) {
@@ -77,19 +128,19 @@
     }
 
     // Función para cargar registros con opciones de edición y eliminación
-    function loadTravelRecords() {
-        travelList.innerHTML = '';
-        const records = JSON.parse(localStorage.getItem('travelRecords')) || [];
-        records.forEach((record, index) => {
-            const li = document.createElement('li');
-            li.innerHTML = `
-                Nombre: ${record.name}, Fecha: ${record.date}, Kilómetros: ${record.kilometers}
-                <button onclick="editTravelRecord(${index})">Editar</button>
-                <button onclick="deleteTravelRecord(${index})">Eliminar</button>
-            `;
-            travelList.appendChild(li);
-        });
-    }
+    // function loadTravelRecords() {
+    //     travelList.innerHTML = '';
+    //     const records = JSON.parse(localStorage.getItem('travelRecords')) || [];
+    //     records.forEach((record, index) => {
+    //         const li = document.createElement('li');
+    //         li.innerHTML = `
+    //             Nombre: ${record.name}, Fecha: ${record.date}, Kilómetros: ${record.kilometers}
+    //             <button class="btn btn-primary" onclick="editTravelRecord(${index})">Editar</button>
+    //             <button class="btn btn-danger" onclick="deleteTravelRecord(${index})">Eliminar</button>
+    //         `;
+    //         travelList.appendChild(li);
+    //     });
+    // }
 
     // Función para editar un registro
     function editTravelRecord(index) {
@@ -109,20 +160,7 @@
         // calculateTotalKilometers();
     };
     
-    // Función para cargar registros con opciones de edición y eliminación
-    function loadTravelRecords() {
-        travelList.innerHTML = '';
-        const records = JSON.parse(localStorage.getItem('travelRecords')) || [];
-        records.forEach((record, index) => {
-            const li = document.createElement('li');
-            li.innerHTML = `
-                Nombre: ${record.name}, Fecha: ${record.date}, Kilómetros: ${record.kilometers}
-                <button onclick="editTravelRecord(${index})">Editar</button>
-                <button onclick="deleteTravelRecord(${index})">Eliminar</button>
-            `;
-            travelList.appendChild(li);
-        });
-    }
+
 
     // Función para calcular y mostrar el total de kilómetros
     // function calculateTotalKilometers() {
@@ -137,5 +175,10 @@
         // calculateTotalKilometers();
     }
     </script>
-</body>
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  </body>
 </html>
+
