@@ -151,7 +151,7 @@
         const records = JSON.parse(localStorage.getItem('travelRecords')) || [];
         const record = records[index];
         if (record) {
-            nombreInput.value = record.name;
+            nameInput.value = record.name;
             dateInput.value = record.date;
             kilometersInput.value = record.kilometers;
             deleteTravelRecord(index);  // Elimina el registro existente para ser reemplazado
