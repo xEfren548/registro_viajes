@@ -97,6 +97,9 @@
         const dateInput = document.getElementById('date');
         const kilometersInput = document.getElementById('kilometers');
         const travelList = document.getElementById('travel-list');
+        const whoSelect = document.getElementById('who-select');
+
+
         
         // Cargar registros al inicio
         window.onload = () => {
@@ -116,11 +119,22 @@
         
         // Guardar registro en Local Storage
         function saveTravelRecord(name, date, kilometers) {
-            const record = { name, date, kilometers };
-            const records = JSON.parse(localStorage.getItem('travelRecords')) || [];
-            records.push(record);
-            localStorage.setItem('travelRecords', JSON.stringify(records));
-            updateAfterChanges();
+         const selectedOption = whoSelect.value;
+         const record = { name, date, kilometers };
+         const records = JSON.parse(localStorage.getItem('travelRecords')) || [];
+                
+         if (selectedOption === 'deberes') {
+             records.push(record);
+         } else if (selectedOption === 'personal') {
+             // Agregar el registro a la tabla de "Personal"
+             const recordPersonal = { name, date, kilometers };
+             const recordsPersonal = JSON.parse(localStorage.getItem('travelRecordsPersonal')) || [];
+             recordsPersonal.push(recordPersonal);
+             localStorage.setItem('travelRecordsPersonal', JSON.stringify(recordsPersonal));
+         }
+         
+         localStorage.setItem('travelRecords', JSON.stringify(records));
+         updateAfterChanges();
         }
         
         // Cargar registros desde Local Storage
@@ -137,22 +151,40 @@
         //     });
         // }
         function loadTravelRecords() {
-            travelBody.innerHTML = '';
-            const records = JSON.parse(localStorage.getItem('travelRecords')) || [];
-            records.forEach((record, index) => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${record.name}</td>
-                    <td>${record.date}</td>
-                    <td>${record.kilometers}</td>
-                    <td>
-                        <button class="btn btn-primary" onclick="editTravelRecord(${index})">Editar</button>
-                        <button class="btn btn-danger   " onclick="deleteTravelRecord(${index})">Eliminar</button>
-                    </td>
-                `;
-                travelBody.appendChild(row);
-            });
-        }
+    travelBody.innerHTML = '';
+    travelBodyPersonal.innerHTML = '';
+    
+    const records = JSON.parse(localStorage.getItem('travelRecords')) || [];
+    const recordsPersonal = JSON.parse(localStorage.getItem('travelRecordsPersonal')) || [];
+    
+    records.forEach((record, index) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${record.name}</td>
+            <td>${record.date}</td>
+            <td>${record.kilometers}</td>
+            <td>
+                <button class="btn btn-primary" onclick="editTravelRecord(${index})">Editar</button>
+                <button class="btn btn-danger" onclick="deleteTravelRecord(${index})">Eliminar</button>
+            </td>
+        `;
+        travelBody.appendChild(row);
+    });
+
+    recordsPersonal.forEach((record, index) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${record.name}</td>
+            <td>${record.date}</td>
+            <td>${record.kilometers}</td>
+            <td>
+                <button class="btn btn-primary" onclick="editTravelRecord(${index})">Editar</button>
+                <button class="btn btn-danger" onclick="deleteTravelRecord(${index})">Eliminar</button>
+            </td>
+        `;
+        travelBodyPersonal.appendChild(row);
+    });
+}
 
 
 
