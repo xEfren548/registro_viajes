@@ -29,6 +29,16 @@
                 <label for="kilometers">Kilómetros:</label>
                 <input type="number" id="kilometers" step="0.1" class="form-control" placeholder="Kms" required>
             </div>
+
+            <div class="form-group">
+            <select name="who" id="who-select">
+                    <option value="0" selected disabled>Elige una opcion...</option>
+                    <option value="deberes">Deberes</option>
+                    <option value="personal">Personal</option>
+                </select>
+                
+
+            </div>
             
             <button class="btn btn-primary mb-5" type="submit">Registrar Viaje</button>
     
@@ -54,7 +64,7 @@
         
         <div class="row">
             <h3>Personal</h3>
-            <table id="travel-table" class="table">
+            <table id="travel-table-personal" class="table">
                 <thead class="thead-light">
                     <tr>
                         <th>Nombre</th>
@@ -63,7 +73,7 @@
                         <th>Acciones</th>
                     </tr>
                 </thead>
-                <tbody id="travel-body"></tbody>
+                <tbody id="travel-body-personal"></tbody>
             </table>
         </div>
         
@@ -77,8 +87,13 @@
     <script>
         const nameInput = document.getElementById('name')
         const travelForm = document.getElementById('travel-form');
+
         const travelTable = document.getElementById('travel-table');
         const travelBody = document.getElementById('travel-body');
+
+        const travelTablePersonal = document.getElementById('travel-table-personal');
+        const travelBodyPersonal = document.getElementById('travel-body-personal');
+
         const dateInput = document.getElementById('date');
         const kilometersInput = document.getElementById('kilometers');
         const travelList = document.getElementById('travel-list');
